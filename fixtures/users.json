@@ -1,0 +1,33 @@
+{
+  "doctor": {
+    "Helena": {
+      "name": "Helena Prado",
+      "email": "helena@medalert.test",
+      "password": "senha123"
+    }
+  },
+  "nurse": {
+    "Camila": {
+      "name": "Camila Duarte",
+      "email": "camila@medalert.test",
+      "password": "senha123"
+    },
+    "Paulo": {
+      "name": "Paulo Ferreira",
+      "email": "paulo@medalert.test",
+      "password": "senha123"
+    }
+  },
+  "patient": {
+    "Marina": {
+      "name": "Marina Souza",
+      "email": "marina@medalert.test",
+      "password": "senha123"
+    },
+    "Roberto": {
+      "name": "Roberto Lima",
+      "email": "roberto@medalert.test",
+      "password": "senha123"
+    }
+  }
+}
