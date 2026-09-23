@@ -26,7 +26,7 @@ test('Login with correct credentials', async ({ page }) => {
 
 });
 
-
+// this test will fail because the system is not validating if the informed password is correct or not, it will always log in the user, even with an incorrect password
 test('Login with incorrect password', async ({ page }) => {
 
     const nurse = users.nurse.Camila;
