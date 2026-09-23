@@ -22,7 +22,7 @@ test('Login with correct credentials', async ({ page }) => {
 
     await page.getByText('Entrar').click();
 
-    await expect(page.locator('header .userinfo')).toContainText(nurse.name);
+    await expect(page.locator('span', { hasText: nurse.name })).toContainText('Enfermeiro(a)');
 
 });
 

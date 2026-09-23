@@ -1,12 +1,4 @@
-import { test, expect } from '@playwright/test';
-
-test.beforeEach(async ({ page }) => {
-
-  await page.goto('http://localhost:3000/');
-
-  await expect(page.getByText('MedAlert')).toBeVisible();
-
-})
+import { test, expect } from '../fixtures/base'
 
 test('Add prescription', async ({ page }) => {
 
@@ -28,6 +20,17 @@ test('Add prescription', async ({ page }) => {
 
   await page.getByText('Prescrição salva com sucesso.').click();
 
-  //completar com expect de cada linha sobre medicamento, dose e frequencia informados
+  const expectedValues = ['Dipirona', '15', '1 cada 8h quando dor'];
+
+  const lastDataRow = page.locator('.card')
+    .filter({ hasText: 'Prescrições atuais' })
+    .locator('table tbody tr')
+    .filter({ has: page.locator('td') })
+    .last();
+
+  const cells = lastDataRow.locator('td');
+  for (let i = 0; i < expectedValues.length; i++) {
+    await expect(cells.nth(i)).toHaveText(expectedValues[i]);
+  }
 
 });
