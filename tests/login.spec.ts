@@ -26,23 +26,22 @@ test('Login with correct credentials', async ({ page }) => {
 
 });
 
-//This test will fail because any password is loggin in
 
-// test('Login with incorrect password', async ({ page }) => {
+test('Login with incorrect password', async ({ page }) => {
 
-//     const nurse = users.nurse.Camila;
+    const nurse = users.nurse.Camila;
 
-//     await page.selectOption('select[id="loginUser"]', { value: nurse.email });
+    await page.selectOption('select[id="loginUser"]', { value: nurse.email });
 
-//     await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
 
-//     await page.fill('input[id="loginPass"]', 'abobrinha');
+    await page.fill('input[id="loginPass"]', 'abobrinha');
 
-//     await page.getByText('Entrar').click();
+    await page.getByText('Entrar').click();
 
-//     await expect(page.locator('header .userinfo')).toContainText('Camila Duarte');
+    await expect(page.getByText('Senha incorreta.')).toBeVisible();
 
-// });
+});
 
 test('Login without password set', async ({ page }) => {
 
