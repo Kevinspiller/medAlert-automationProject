@@ -34,12 +34,6 @@ jobs:
       - name: Instalar browsers do Playwright
         run: npx playwright install --with-deps chromium
 
-      - name: Verificar estrutura
-        run: |
-          pwd
-          ls
-          ls medalert-app
-
       - name: Rodar testes
         run: npx playwright test
         env:
