@@ -1,0 +1,48 @@
+name: CI
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout testes
+        uses: actions/checkout@v4
+
+      - name: Checkout MedAlert
+        uses: actions/checkout@v4
+        with:
+          repository: LumeStack/medalert-app
+          path: medalert-app
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            medalert-app/package-lock.json
+
+      - name: Instalar dependências dos testes
+        run: npm ci
+
+      - name: Instalar dependências do MedAlert
+        run: npm ci
+        working-directory: medalert-app
+
+      - name: Instalar browsers do Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Rodar testes
+        run: npx playwright test
+        env:
+          APP_DIR: ${{ github.workspace }}/medalert-app
+
+      - name: Upload do relatório
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
