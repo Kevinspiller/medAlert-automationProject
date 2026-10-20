@@ -1,26 +1,26 @@
-import { test, expect } from '@playwright/test';
+import { Page, test, expect } from '@playwright/test';
+import { LoginPage } from '../tests/pages/loginPage'
 import { faker } from '@faker-js/faker';
 import users from '../fixtures/users.json'
 
+let loginPage: LoginPage;
+
 test.beforeEach(async ({ page }) => {
+
+     loginPage = new LoginPage(page);
 
     await page.goto('http://localhost:3000/');
 
-    await expect(page.getByText('Sistema de Gerenciamento de Alertas Hospitalares')).toBeVisible();
+    await expect(page.getByText('Sistema de Gerenciamento de Alertas Hospitalares')).toBeVisible();  
 
 })
 
 test('Login with correct credentials', async ({ page }) => {
 
     const nurse = users.nurse.Camila;
+    
 
-    await page.selectOption('select[id="loginUser"]', { value: nurse.email });
-
-    await page.keyboard.press('Tab');
-
-    await page.fill('input[id="loginPass"]', nurse.password);
-
-    await page.getByText('Entrar').click();
+    await loginPage.login(nurse.email, nurse.password);
 
     await expect(page.locator('span', { hasText: nurse.name })).toContainText('Enfermeiro(a)');
 
@@ -31,13 +31,7 @@ test('Login with incorrect password', async ({ page }) => {
 
     const nurse = users.nurse.Camila;
 
-    await page.selectOption('select[id="loginUser"]', { value: nurse.email });
-
-    await page.keyboard.press('Tab');
-
-    await page.fill('input[id="loginPass"]', 'abobrinha');
-
-    await page.getByText('Entrar').click();
+    await loginPage.login(nurse.email, 'abobrinha');
 
     await expect(page.getByText('Senha incorreta.')).toBeVisible();
 
@@ -47,11 +41,7 @@ test('Login without password set', async ({ page }) => {
 
     const nurse = users.nurse.Paulo;
 
-    await page.selectOption('select[id="loginUser"]', { value: nurse.email });
-
-    await page.keyboard.press('Tab');
-
-    await page.getByText('Entrar').click();
+    await loginPage.login(nurse.email, '');
 
     await expect(page.locator('p[id="loginError"]')).toBeVisible();
 
@@ -65,21 +55,7 @@ test('Create account', async ({ page }) => {
     const randomEmail = faker.internet.email();
     const randomPassword = faker.internet.password();
 
-    await page.locator('a[id="goRegister"]').click();
-
-    await expect(page.getByText('Cadastro de novo usuário no MedAlert')).toBeVisible();
-
-    await page.locator('input[id="regName"]').fill(randomName);
-
-    await page.locator('input[id="regEmail"]').fill(randomEmail);
-
-    await page.selectOption('select[id="regRole"]', { label: 'Paciente' });
-
-    await page.locator('input[id="regPass"]').fill(randomPassword);
-
-    await page.locator('input[id="regPass2"]').fill(randomPassword);
-
-    await page.getByRole('button', { name: 'Criar conta' }).click();
+    await loginPage.createAccount(randomName, randomEmail, 'Paciente', randomPassword);
 
     await page.getByText('Conta criada com sucesso. Faça login.').click();
 
